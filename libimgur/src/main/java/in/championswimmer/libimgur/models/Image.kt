@@ -66,7 +66,7 @@ data class Image(
     @Json(name = "tags")
     val tags: List<Any>,
     @Json(name = "title")
-    val title: Any?,
+    var title: String?,
     @Json(name = "type")
     val type: String,
     @Json(name = "ups")

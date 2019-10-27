@@ -33,12 +33,17 @@ class MainActivity : AppCompatActivity() {
     fun goToNextPhoto() {
         photoStoryViewModel.photoStream.value?.pop()?.let {
             Glide.with(ivPhotoStory).load(it.link).into(ivPhotoStory)
-
+            tvPhotoTitle.text = it.title
             ObjectAnimator.ofInt(progressPhotoStory, "progress", 100, 0).apply {
                 duration = 4000
                 interpolator = LinearInterpolator()
                 start()
                 doOnEnd (callGoToNext)
+            }
+
+            // Preload the next photo
+            photoStoryViewModel.photoStream.value?.peek()?.let {
+                Glide.with(ivPhotoStory).load(it.link).preload()
             }
         }
 

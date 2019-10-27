@@ -21,4 +21,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <TextView
+        android:textColor="@color/colorAccent"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:id="@+id/tvPhotoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </FrameLayout>
