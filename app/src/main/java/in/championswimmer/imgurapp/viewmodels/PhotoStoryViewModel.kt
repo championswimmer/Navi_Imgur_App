@@ -6,18 +6,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import java.util.*
 
 class PhotoStoryViewModel : ViewModel() {
-    val photoStream = MutableLiveData<List<Image>>()
+    val photoStream = MutableLiveData<Stack<Image>>()
+
 
     fun refreshPhotoStory() {
         viewModelScope.launch {
             val gallery = Imgur.api.getGalleryByTag("science_and_tech")
+            val images = gallery.data.items
+                .flatMap { p -> p.images ?: listOf() }
+                .filter { i -> i.type.startsWith("image/") }
+
             photoStream.postValue(
-                gallery.data.items
-                    .flatMap { p -> p.images ?: listOf() }
-                    .filter { i -> i.type.startsWith("image/") }
+                Stack<Image>().apply { addAll(images) }
             )
+
         }
     }
 }

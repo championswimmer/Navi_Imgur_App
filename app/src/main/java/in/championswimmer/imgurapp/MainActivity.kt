@@ -1,8 +1,12 @@
 package `in`.championswimmer.imgurapp
 
 import `in`.championswimmer.imgurapp.viewmodels.PhotoStoryViewModel
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.animation.doOnEnd
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
@@ -17,13 +21,27 @@ class MainActivity : AppCompatActivity() {
         photoStoryViewModel = ViewModelProviders.of(this).get(PhotoStoryViewModel::class.java)
         photoStoryViewModel.refreshPhotoStory()
         photoStoryViewModel.photoStream.observe(this, Observer {
-
-            Glide
-                .with(ivPhotoStory)
-                .load(it[0].link)
-                .into(ivPhotoStory)
-
+            goToNextPhoto()
         })
+    }
+
+    /**
+     * A function-calling-function to prevent recursion inside [goToNextPhoto]
+     */
+    private val callGoToNext = { it: Animator ->  goToNextPhoto() }
+
+    fun goToNextPhoto() {
+        photoStoryViewModel.photoStream.value?.pop()?.let {
+            Glide.with(ivPhotoStory).load(it.link).into(ivPhotoStory)
+
+            ObjectAnimator.ofInt(progressPhotoStory, "progress", 100, 0).apply {
+                duration = 4000
+                interpolator = LinearInterpolator()
+                start()
+                doOnEnd (callGoToNext)
+            }
+        }
 
     }
+
 }
