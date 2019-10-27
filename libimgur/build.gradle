@@ -1,0 +1,28 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+test {
+    useJUnit()
+    maxHeapSize = '1G'
+}
+
+ext {
+    okHttpVersion = "4.2.2"
+    retrofitVersion = "2.6.2"
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2'
+
+    implementation "com.squareup.moshi:moshi-kotlin:1.8.0"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+
+    testImplementation "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
+}
+
+sourceCompatibility = "7"
+targetCompatibility = "7"
