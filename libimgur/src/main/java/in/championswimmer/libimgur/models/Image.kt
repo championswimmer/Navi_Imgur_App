@@ -1,78 +1,80 @@
 package `in`.championswimmer.libimgur.models
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class Image(
     @Json(name = "account_id")
     val accountId: Any?,
     @Json(name = "account_url")
-    val accountUrl: Any?,
+    val accountUrl: String?,
     @Json(name = "ad_type")
-    val adType: Int,
+    val adType: Int?,
     @Json(name = "ad_url")
-    val adUrl: String,
+    val adUrl: String?,
     @Json(name = "animated")
-    val animated: Boolean,
+    val animated: Boolean?,
     @Json(name = "bandwidth")
-    val bandwidth: Long,
+    val bandwidth: Long?,
     @Json(name = "comment_count")
     val commentCount: Any?,
     @Json(name = "datetime")
-    val datetime: Int,
+    val datetime: Int?,
     @Json(name = "description")
     val description: Any?,
     @Json(name = "downs")
     val downs: Any?,
     @Json(name = "edited")
-    val edited: String,
+    val edited: String?,
     @Json(name = "favorite")
-    val favorite: Boolean,
+    val favorite: Boolean?,
     @Json(name = "favorite_count")
     val favoriteCount: Any?,
     @Json(name = "gifv")
-    val gifv: String,
+    val gifv: String?,
     @Json(name = "has_sound")
-    val hasSound: Boolean,
+    val hasSound: Boolean?,
     @Json(name = "height")
-    val height: Int,
+    val height: Int?,
     @Json(name = "hls")
-    val hls: String,
+    val hls: String?,
     @Json(name = "id")
-    val id: String,
+    val id: String?,
     @Json(name = "in_gallery")
-    val inGallery: Boolean,
+    val inGallery: Boolean?,
     @Json(name = "in_most_viral")
-    val inMostViral: Boolean,
+    val inMostViral: Boolean?,
     @Json(name = "is_ad")
-    val isAd: Boolean,
+    val isAd: Boolean?,
     @Json(name = "link")
-    val link: String,
+    val link: String?,
     @Json(name = "mp4")
-    val mp4: String,
+    val mp4: String?,
     @Json(name = "mp4_size")
-    val mp4Size: Int,
+    val mp4Size: Int?,
     @Json(name = "nsfw")
     val nsfw: Any?,
     @Json(name = "points")
     val points: Any?,
     @Json(name = "processing")
-    val processing: Processing,
+    val processing: Processing?,
     @Json(name = "score")
     val score: Any?,
     @Json(name = "section")
     val section: Any?,
     @Json(name = "size")
-    val size: Int,
+    val size: Int?,
     @Json(name = "tags")
-    val tags: List<Any>,
+    val tags: List<Any>?,
     @Json(name = "title")
     var title: String?,
     @Json(name = "type")
-    val type: String,
+    val type: String?,
     @Json(name = "ups")
     val ups: Any?,
     @Json(name = "views")
-    val views: Int,
+    val views: Int?,
     @Json(name = "vote")
     val vote: Any?,
     @Json(name = "width")

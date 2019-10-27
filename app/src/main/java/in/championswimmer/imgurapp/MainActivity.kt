@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var photoStoryViewModel: PhotoStoryViewModel
+    var currentAnimator: ObjectAnimator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         photoStoryViewModel.photoStream.value?.pop()?.let {
             Glide.with(ivPhotoStory).load(it.link).into(ivPhotoStory)
             tvPhotoTitle.text = it.title
-            ObjectAnimator.ofInt(progressPhotoStory, "progress", 100, 0).apply {
+            currentAnimator =  ObjectAnimator.ofInt(progressPhotoStory, "progress", 100, 0).apply {
                 duration = 4000
                 interpolator = LinearInterpolator()
                 start()
@@ -47,6 +48,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        currentAnimator?.takeIf { it.isStarted && it.isPaused }?.resume()
+    }
+
+    override fun onPause() {
+        currentAnimator?.takeIf { it.isStarted && it.isRunning }?.pause()
+        super.onPause()
     }
 
 }

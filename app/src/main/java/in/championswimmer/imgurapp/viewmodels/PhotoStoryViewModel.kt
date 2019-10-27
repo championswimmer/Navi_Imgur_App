@@ -20,17 +20,17 @@ class PhotoStoryViewModel : ViewModel() {
             withContext(Dispatchers.IO) {
                 val gallery = Imgur.api.getGalleryByTag("science_and_tech")
                 val images = gallery.data.items
-                    .flatMap { p ->
+                    ?.flatMap { p ->
                         p.images?.map {
                             it.apply {
                                 title = title ?: p.title
                             }
                         } ?: listOf()
                     }
-                    .filter { i -> i.type.startsWith("image/") }
+                    ?.filter { i -> i.type?.startsWith("image/") ?: false }
 
                 photoStream.postValue(
-                    Stack<Image>().apply { addAll(images) }
+                    Stack<Image>().apply { addAll(images ?: listOf()) }
                 )
             }
 
