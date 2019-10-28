@@ -4,20 +4,17 @@ import `in`.championswimmer.imgurapp.enums.FetchStatus.FAILED
 import `in`.championswimmer.imgurapp.enums.FetchStatus.FETCHING
 import `in`.championswimmer.imgurapp.enums.FetchStatus.NONE
 import `in`.championswimmer.imgurapp.enums.FetchStatus.SUCCESS
-import `in`.championswimmer.imgurapp.utils.ImageDownloader
+import `in`.championswimmer.imgurapp.utils.ImageDownloader.initiateImageDownload
+import `in`.championswimmer.imgurapp.utils.ImageSharer.initiateImageShare
 import `in`.championswimmer.imgurapp.viewmodels.PhotoStoryViewModel
 import `in`.championswimmer.libimgur.models.Image
-import android.Manifest
 import android.animation.Animator
 import android.animation.ObjectAnimator
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
@@ -114,27 +111,13 @@ class MainActivity : AppCompatActivity() {
 
             }
             .setNeutralButton("Download") { _, _ ->
-                initiateImageDownload(image)
+                initiateImageDownload(this, image)
             }
-            .setNegativeButton("Share") { _, _ -> }
+            .setNegativeButton("Share") { _, _ ->
+                initiateImageShare(this, image)
+            }
             .setPositiveButton("Like") { _, _ -> }
             .show()
-    }
-
-    private fun initiateImageDownload(image: Image) {
-        when (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            PackageManager.PERMISSION_GRANTED -> ImageDownloader.downloadImage(this, image)
-            PackageManager.PERMISSION_DENIED -> {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    ),
-                    PERM_REQ_CODE
-                )
-            }
-        }
     }
 
     override fun onResume() {

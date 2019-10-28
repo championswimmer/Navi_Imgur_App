@@ -27,5 +27,5 @@ dependencies {
     testImplementation "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 }
 
-sourceCompatibility = "7"
-targetCompatibility = "7"
+sourceCompatibility = "8"
+targetCompatibility = "8"
