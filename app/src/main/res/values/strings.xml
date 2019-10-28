@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">imgurAPP</string>
+
+    <string name="comment_pts">%1$d pts</string>
 </resources>

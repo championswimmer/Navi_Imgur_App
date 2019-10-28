@@ -14,14 +14,15 @@
         android:layout_weight="1"/>
 
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tlIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:layout_margin="10dp"
-        app:tabSelectedTextColor="@color/colorPrimaryDark"
+        android:background="@android:color/black"
         app:tabGravity="center"
         app:tabIndicatorGravity="stretch"
         app:tabRippleColor="@color/colorPrimary"
-        android:id="@+id/tlIndicator"
-        android:layout_width="match_parent"
-        android:layout_height="30dp" />
+        app:tabSelectedTextColor="@android:color/black" />
 
 
     <androidx.recyclerview.widget.RecyclerView

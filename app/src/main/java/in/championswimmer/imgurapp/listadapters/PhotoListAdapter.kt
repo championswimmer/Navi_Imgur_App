@@ -13,8 +13,14 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_item_photo.view.*
 
 class PhotoListAdapter(
-    private val images: List<Image>
+    private val images: MutableList<Image>
 ) : ListAdapter<Image, PhotoViewHolder>(PhotoDiffCallback()) {
+
+    fun updateData(newImages: List<Image>) {
+        images.clear()
+        images.addAll(newImages)
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount(): Int = images.size
 

@@ -33,12 +33,36 @@ class AlbumDetailsActivity : AppCompatActivity() {
     lateinit var albumHash: String
     lateinit var albumDetailsViewModel: AlbumDetailsViewModel
 
+    val photoListAdapter = PhotoListAdapter(arrayListOf())
+    val commentListAdapter = CommentListAdapter(arrayListOf())
+
+    private fun initViews () {
+        vpPhotos.adapter = photoListAdapter
+        TabLayoutMediator(tlIndicator, vpPhotos,
+            TabConfigurationStrategy { tab, position ->
+                tab.text = (position + 1).toString()
+            }).attach()
+
+        rvComments.layoutManager = LinearLayoutManager(this)
+        rvComments.adapter = commentListAdapter
+    }
+
+    private fun initViewModel() {
+        albumDetailsViewModel = ViewModelProviders.of(this).get(AlbumDetailsViewModel::class.java)
+        albumDetailsViewModel.loadAlbum(albumHash)
+        albumDetailsViewModel.images.observe(this, Observer {
+            photoListAdapter.updateData(it.toMutableList())
+
+        })
+
+        albumDetailsViewModel.comments.observe(this, Observer {
+            commentListAdapter.updateData(it.toMutableList())
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_album_details)
-
-
-        albumDetailsViewModel = ViewModelProviders.of(this).get(AlbumDetailsViewModel::class.java)
 
         albumHash = intent.getStringExtra(BUNDLE_KEY_ALBUM_HASH) ?: ""
         if (albumHash.isEmpty()) {
@@ -46,21 +70,7 @@ class AlbumDetailsActivity : AppCompatActivity() {
             finish()
         }
 
-        albumDetailsViewModel.loadAlbum(albumHash)
-
-        albumDetailsViewModel.images.observe(this, Observer {
-            vpPhotos.adapter = PhotoListAdapter(it)
-            TabLayoutMediator(tlIndicator, vpPhotos,
-                TabConfigurationStrategy { tab, position ->
-                    tab.text = (position + 1).toString()
-                }).attach()
-        })
-
-        albumDetailsViewModel.comments.observe(this, Observer {
-            rvComments.layoutManager = LinearLayoutManager(this)
-            rvComments.adapter = CommentListAdapter(it)
-        })
-
-
+        initViews()
+        initViewModel()
     }
 }
