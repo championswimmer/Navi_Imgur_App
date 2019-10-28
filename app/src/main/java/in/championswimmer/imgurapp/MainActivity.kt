@@ -1,11 +1,15 @@
 package `in`.championswimmer.imgurapp
 
+import `in`.championswimmer.imgurapp.enums.FetchStatus.FAILED
+import `in`.championswimmer.imgurapp.enums.FetchStatus.FETCHING
+import `in`.championswimmer.imgurapp.enums.FetchStatus.NONE
+import `in`.championswimmer.imgurapp.enums.FetchStatus.SUCCESS
 import `in`.championswimmer.imgurapp.viewmodels.PhotoStoryViewModel
 import android.animation.Animator
 import android.animation.ObjectAnimator
-import android.content.Intent
 import android.os.Bundle
 import android.view.animation.LinearInterpolator
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.lifecycle.Observer
@@ -17,22 +21,50 @@ class MainActivity : AppCompatActivity() {
     lateinit var photoStoryViewModel: PhotoStoryViewModel
     var currentAnimator: ObjectAnimator? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    private fun setupViewModel() {
         photoStoryViewModel = ViewModelProviders.of(this).get(PhotoStoryViewModel::class.java)
-        photoStoryViewModel.refreshPhotoStory()
+        photoStoryViewModel.fetchStatus.observe(this, Observer {
+            when (it) {
+                FETCHING -> contentLoader.show()
+                SUCCESS -> contentLoader.hide()
+                FAILED -> {
+                    contentLoader.hide()
+                    AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.err_fetch_story_title))
+                        .setMessage(getString(R.string.err_fetch_story_msg))
+                        .setNegativeButton(getString(R.string.btn_close_app)) { _, _ -> finish() }
+                        .setPositiveButton(getString(R.string.btn_retry)) { _, _ -> refresh() }
+                        .setCancelable(false)
+                        .show()
+                }
+            }
+        })
+
         photoStoryViewModel.photoStream.observe(this, Observer {
             goToNextPhoto()
         })
     }
 
+    private fun refresh() {
+        photoStoryViewModel.fetchStatus.value = NONE
+        photoStoryViewModel.refreshPhotoStory()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        setupViewModel()
+        refresh()
+
+    }
+
     /**
      * A function-calling-function to prevent recursion inside [goToNextPhoto]
      */
-    private val callGoToNext = { it: Animator ->  goToNextPhoto() }
+    private val callGoToNext = { it: Animator -> goToNextPhoto() }
 
-    fun goToNextPhoto() {
+    private fun goToNextPhoto() {
         photoStoryViewModel.photoStream.value?.pop()?.let { image ->
             Glide.with(ivPhotoStory).load(image.link).into(ivPhotoStory)
             tvPhotoTitle.text = image.title
@@ -41,11 +73,11 @@ class MainActivity : AppCompatActivity() {
                 image.parentItemId?.let { hash -> AlbumDetailsActivity.start(this, hash) }
             }
 
-            currentAnimator =  ObjectAnimator.ofInt(progressPhotoStory, "progress", 100, 0).apply {
+            currentAnimator = ObjectAnimator.ofInt(progressPhotoStory, "progress", 100, 0).apply {
                 duration = 4000
                 interpolator = LinearInterpolator()
                 start()
-                doOnEnd (callGoToNext)
+                doOnEnd(callGoToNext)
             }
 
             // Preload the next photo

@@ -24,6 +24,13 @@
         app:tabRippleColor="@color/colorPrimary"
         app:tabSelectedTextColor="@android:color/black" />
 
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:indeterminate="true"
+        android:id="@+id/contentLoader"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvComments"

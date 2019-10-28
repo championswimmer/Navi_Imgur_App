@@ -1,4 +1,8 @@
 package `in`.championswimmer.imgurapp.enums
 
-class FetchStatus {
+enum class FetchStatus {
+    NONE,
+    FETCHING,
+    FAILED,
+    SUCCESS
 }

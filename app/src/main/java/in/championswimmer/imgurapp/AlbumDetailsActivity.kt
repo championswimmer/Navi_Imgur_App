@@ -1,5 +1,8 @@
 package `in`.championswimmer.imgurapp
 
+import `in`.championswimmer.imgurapp.enums.FetchStatus.FAILED
+import `in`.championswimmer.imgurapp.enums.FetchStatus.FETCHING
+import `in`.championswimmer.imgurapp.enums.FetchStatus.SUCCESS
 import `in`.championswimmer.imgurapp.listadapters.CommentListAdapter
 import `in`.championswimmer.imgurapp.listadapters.PhotoListAdapter
 import `in`.championswimmer.imgurapp.viewmodels.AlbumDetailsViewModel
@@ -7,11 +10,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.tabs.TabLayout.Tab
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy
 import kotlinx.android.synthetic.main.activity_album_details.*
@@ -36,7 +39,7 @@ class AlbumDetailsActivity : AppCompatActivity() {
     val photoListAdapter = PhotoListAdapter(arrayListOf())
     val commentListAdapter = CommentListAdapter(arrayListOf())
 
-    private fun initViews () {
+    private fun initViews() {
         vpPhotos.adapter = photoListAdapter
         TabLayoutMediator(tlIndicator, vpPhotos,
             TabConfigurationStrategy { tab, position ->
@@ -49,15 +52,26 @@ class AlbumDetailsActivity : AppCompatActivity() {
 
     private fun initViewModel() {
         albumDetailsViewModel = ViewModelProviders.of(this).get(AlbumDetailsViewModel::class.java)
+        albumDetailsViewModel.fetchStatus.observe(this, Observer {
+            when (it) {
+                FETCHING -> contentLoader.show()
+                SUCCESS -> contentLoader.hide()
+                FAILED -> {
+                    contentLoader.hide()
+                    Toast.makeText(this, "Could not fetch this album", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
+        })
         albumDetailsViewModel.loadAlbum(albumHash)
         albumDetailsViewModel.images.observe(this, Observer {
             photoListAdapter.updateData(it.toMutableList())
 
         })
-
         albumDetailsViewModel.comments.observe(this, Observer {
             commentListAdapter.updateData(it.toMutableList())
         })
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

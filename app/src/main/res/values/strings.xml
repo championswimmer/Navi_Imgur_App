@@ -2,4 +2,9 @@
     <string name="app_name">imgurAPP</string>
 
     <string name="comment_pts">%1$d pts</string>
+
+    <string name="err_fetch_story_title">Error fetching images</string>
+    <string name="err_fetch_story_msg">Please make sure you are connected to the internet and try again</string>
+    <string name="btn_close_app">Close App</string>
+    <string name="btn_retry">Retry</string>
 </resources>

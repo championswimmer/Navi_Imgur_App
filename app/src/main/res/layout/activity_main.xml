@@ -29,4 +29,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <androidx.core.widget.ContentLoadingProgressBar
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:indeterminate="true"
+        android:id="@+id/contentLoader"
+        android:layout_gravity="center"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+
 </FrameLayout>
