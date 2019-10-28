@@ -3,6 +3,7 @@ package `in`.championswimmer.imgurapp
 import `in`.championswimmer.imgurapp.viewmodels.PhotoStoryViewModel
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
@@ -32,9 +33,14 @@ class MainActivity : AppCompatActivity() {
     private val callGoToNext = { it: Animator ->  goToNextPhoto() }
 
     fun goToNextPhoto() {
-        photoStoryViewModel.photoStream.value?.pop()?.let {
-            Glide.with(ivPhotoStory).load(it.link).into(ivPhotoStory)
-            tvPhotoTitle.text = it.title
+        photoStoryViewModel.photoStream.value?.pop()?.let { image ->
+            Glide.with(ivPhotoStory).load(image.link).into(ivPhotoStory)
+            tvPhotoTitle.text = image.title
+
+            ivPhotoStory.setOnClickListener {
+                image.parentItemId?.let { hash -> AlbumDetailsActivity.start(this, hash) }
+            }
+
             currentAnimator =  ObjectAnimator.ofInt(progressPhotoStory, "progress", 100, 0).apply {
                 duration = 4000
                 interpolator = LinearInterpolator()

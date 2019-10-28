@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 
 class PhotoStoryViewModel : ViewModel() {
@@ -16,25 +15,23 @@ class PhotoStoryViewModel : ViewModel() {
 
     fun refreshPhotoStory() {
 
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val gallery = Imgur.api.getGalleryByTag("science_and_tech")
-                val images = gallery.data.items
-                    ?.flatMap { p ->
-                        p.images?.map {
-                            it.apply {
-                                title = title ?: p.title
-                                parentItemId = p.id
-                            }
-                        } ?: listOf()
-                    }
-                    ?.filter { i -> i.type?.startsWith("image/") ?: false }
+        viewModelScope.launch(Dispatchers.IO) {
+            val gallery = Imgur.api.getGalleryByTag("science_and_tech")
+            val images = gallery.data?.items
+                ?.flatMap { p ->
+                    p.images?.map {
+                        it.apply {
+                            title = title ?: p.title
+                            parentItemId = p.id
+                        }
+                    } ?: listOf()
+                }
+                ?.filter { i -> i.type?.startsWith("image/") ?: false }
 
-                photoStream.postValue(
-                    Stack<Image>().apply { addAll(images ?: listOf()) }
-                )
-            }
-
+            photoStream.postValue(
+                Stack<Image>().apply { addAll(images ?: listOf()) }
+            )
         }
+
     }
 }
