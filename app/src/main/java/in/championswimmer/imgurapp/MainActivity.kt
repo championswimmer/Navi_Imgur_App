@@ -72,6 +72,9 @@ class MainActivity : AppCompatActivity() {
     private val callGoToNext = { it: Animator -> goToNextPhoto() }
 
     private fun goToNextPhoto() {
+        if (photoStoryViewModel.photoStream.value?.empty() == true) {
+            photoStoryViewModel.refreshPhotoStory(true)
+        }
         photoStoryViewModel.photoStream.value?.pop()?.let { image ->
             Glide.with(ivPhotoStory).load(image.link).into(ivPhotoStory)
             tvPhotoTitle.text = image.title
@@ -92,6 +95,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             // Preload the next photo
+
             photoStoryViewModel.photoStream.value?.peek()?.let {
                 Glide.with(ivPhotoStory).load(it.link).preload()
             }

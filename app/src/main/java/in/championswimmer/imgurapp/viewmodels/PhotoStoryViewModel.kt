@@ -16,15 +16,17 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class PhotoStoryViewModel : ViewModel() {
+    private var page = 0
     val photoStream = MutableLiveData<Stack<Image>>()
     val fetchStatus = MutableLiveData<FetchStatus>(NONE)
 
-    fun refreshPhotoStory() {
+    fun refreshPhotoStory(nextPage: Boolean = false) {
+        if (nextPage) { page++ } else { page = 1 }
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 fetchStatus.postValue(FETCHING)
-                val gallery = Imgur.api.getGalleryByTag("science_and_tech")
+                val gallery = Imgur.api.getGalleryByTag("science_and_tech", pageNum = page)
                 val images = gallery.data?.items
                     ?.flatMap { p ->
                         p.images?.map {
@@ -37,7 +39,7 @@ class PhotoStoryViewModel : ViewModel() {
                     ?.filter { i -> i.type?.startsWith("image/") ?: false }
                 fetchStatus.postValue(SUCCESS)
                 photoStream.postValue(
-                    Stack<Image>().apply { addAll(images ?: listOf()) }
+                    Stack<Image>().apply { addAll(images!!.reversed()) }
                 )
             } catch (e: Exception) {
                 Log.e("PhotoStory", "Error fetching", e)

@@ -8,9 +8,11 @@ import retrofit2.http.Path
 
 interface ImgurAPI {
 
-    @GET("gallery/t/{tag}")
+    @GET("gallery/t/{tag}/{sort}/{page}")
     suspend fun getGalleryByTag(
-        @Path("tag") tag: String
+        @Path("tag") tag: String,
+        @Path("sort") sortBy: String = "time",
+        @Path("page") pageNum: Int = 1
     ): GalleryResponse
 
     @GET("album/{albumHash}")
