@@ -24,6 +24,7 @@ class PhotoStoryViewModel : ViewModel() {
                         p.images?.map {
                             it.apply {
                                 title = title ?: p.title
+                                parentItemId = p.id
                             }
                         } ?: listOf()
                     }

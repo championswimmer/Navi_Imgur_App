@@ -78,5 +78,8 @@ data class Image(
     @Json(name = "vote")
     val vote: Any?,
     @Json(name = "width")
-    val width: Int
+    val width: Int,
+
+    // For internal use
+    var parentItemId: String? = null
 )

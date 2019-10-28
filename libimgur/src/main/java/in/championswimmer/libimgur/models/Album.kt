@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GalleryItem(
+data class Album(
     @Json(name = "account_id")
     val accountId: Int?,
     @Json(name = "account_url")

@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
     @Json(name = "is_whitelisted")
     val isWhitelisted: Boolean?,
     @Json(name = "items")
-    val items: List<GalleryItem>?,
+    val items: List<Album>?,
     @Json(name = "logo_destination_url")
     val logoDestinationUrl: Any?,
     @Json(name = "logo_hash")
