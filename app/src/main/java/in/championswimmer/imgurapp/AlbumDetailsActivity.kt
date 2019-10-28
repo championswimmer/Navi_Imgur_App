@@ -1,6 +1,7 @@
 package `in`.championswimmer.imgurapp
 
 import `in`.championswimmer.imgurapp.listadapters.CommentListAdapter
+import `in`.championswimmer.imgurapp.listadapters.PhotoListAdapter
 import `in`.championswimmer.imgurapp.viewmodels.AlbumDetailsViewModel
 import android.app.Activity
 import android.content.Intent
@@ -10,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayout.Tab
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy
 import kotlinx.android.synthetic.main.activity_album_details.*
 
 class AlbumDetailsActivity : AppCompatActivity() {
@@ -43,6 +47,14 @@ class AlbumDetailsActivity : AppCompatActivity() {
         }
 
         albumDetailsViewModel.loadAlbum(albumHash)
+
+        albumDetailsViewModel.images.observe(this, Observer {
+            vpPhotos.adapter = PhotoListAdapter(it)
+            TabLayoutMediator(tlIndicator, vpPhotos,
+                TabConfigurationStrategy { tab, position ->
+                    tab.text = (position + 1).toString()
+                }).attach()
+        })
 
         albumDetailsViewModel.comments.observe(this, Observer {
             rvComments.layoutManager = LinearLayoutManager(this)

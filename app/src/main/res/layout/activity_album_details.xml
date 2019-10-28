@@ -13,6 +13,17 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
+    <com.google.android.material.tabs.TabLayout
+        android:layout_margin="10dp"
+        app:tabSelectedTextColor="@color/colorPrimaryDark"
+        app:tabGravity="center"
+        app:tabIndicatorGravity="stretch"
+        app:tabRippleColor="@color/colorPrimary"
+        android:id="@+id/tlIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvComments"
         android:layout_width="match_parent"
