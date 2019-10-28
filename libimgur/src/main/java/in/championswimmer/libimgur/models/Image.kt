@@ -22,7 +22,7 @@ data class Image(
     @Json(name = "datetime")
     val datetime: Int?,
     @Json(name = "description")
-    val description: Any?,
+    val description: String?,
     @Json(name = "downs")
     val downs: Any?,
     @Json(name = "edited")

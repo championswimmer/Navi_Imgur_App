@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class AlbumDetailsViewModel : ViewModel() {
     val images = MutableLiveData<List<Image>>()
@@ -29,7 +28,10 @@ class AlbumDetailsViewModel : ViewModel() {
                 val albumComments = Imgur.api.getAlbumComments(albumHash)
 
                 album.data?.images?.let { images.postValue(it) }
-                albumComments.data?.let { comments.postValue(it) }
+                albumComments.data
+                    ?.filter { !(it.deleted ?: false) }
+                    ?.let { comments.postValue(it) }
+
                 fetchStatus.postValue(SUCCESS)
             } catch (e: Exception) {
                 Log.e("Album", "Error fetching", e)

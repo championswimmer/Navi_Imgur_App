@@ -2,6 +2,7 @@ package `in`.championswimmer.imgurapp
 
 import `in`.championswimmer.imgurapp.enums.FetchStatus.FAILED
 import `in`.championswimmer.imgurapp.enums.FetchStatus.FETCHING
+import `in`.championswimmer.imgurapp.enums.FetchStatus.NONE
 import `in`.championswimmer.imgurapp.enums.FetchStatus.SUCCESS
 import `in`.championswimmer.imgurapp.listadapters.CommentListAdapter
 import `in`.championswimmer.imgurapp.listadapters.PhotoListAdapter

@@ -8,7 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimarySurface">@color/colorPrimarySurface</item>
 
-        <item name="android:windowFullscreen">true</item>
+        <item name="statusBarBackground">@color/colorPrimarySurface</item>
+        <item name="android:statusBarColor">@color/colorPrimarySurface</item>
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:colorBackground">@android:color/black</item>
     </style>

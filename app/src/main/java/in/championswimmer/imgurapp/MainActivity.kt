@@ -4,20 +4,30 @@ import `in`.championswimmer.imgurapp.enums.FetchStatus.FAILED
 import `in`.championswimmer.imgurapp.enums.FetchStatus.FETCHING
 import `in`.championswimmer.imgurapp.enums.FetchStatus.NONE
 import `in`.championswimmer.imgurapp.enums.FetchStatus.SUCCESS
+import `in`.championswimmer.imgurapp.utils.ImageDownloader
 import `in`.championswimmer.imgurapp.viewmodels.PhotoStoryViewModel
+import `in`.championswimmer.libimgur.models.Image
+import android.Manifest
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        const val PERM_REQ_CODE = 1451
+    }
+
     lateinit var photoStoryViewModel: PhotoStoryViewModel
     var currentAnimator: ObjectAnimator? = null
 
@@ -72,6 +82,10 @@ class MainActivity : AppCompatActivity() {
             ivPhotoStory.setOnClickListener {
                 image.parentItemId?.let { hash -> AlbumDetailsActivity.start(this, hash) }
             }
+            ivPhotoStory.setOnLongClickListener {
+                showDetailDialog(image)
+                true
+            }
 
             currentAnimator = ObjectAnimator.ofInt(progressPhotoStory, "progress", 100, 0).apply {
                 duration = 4000
@@ -86,6 +100,41 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun showDetailDialog(image: Image) {
+        currentAnimator?.takeIf { it.isStarted && it.isRunning }?.pause()
+
+        AlertDialog.Builder(this)
+            .setTitle(image.title)
+            .setMessage(image.description ?: "")
+            .setIcon(android.R.drawable.ic_menu_gallery)
+            .setOnDismissListener {
+                currentAnimator?.takeIf { it.isStarted && it.isPaused }?.resume()
+
+            }
+            .setNeutralButton("Download") { _, _ ->
+                initiateImageDownload(image)
+            }
+            .setNegativeButton("Share") { _, _ -> }
+            .setPositiveButton("Like") { _, _ -> }
+            .show()
+    }
+
+    private fun initiateImageDownload(image: Image) {
+        when (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            PackageManager.PERMISSION_GRANTED -> ImageDownloader.downloadImage(this, image)
+            PackageManager.PERMISSION_DENIED -> {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    ),
+                    PERM_REQ_CODE
+                )
+            }
+        }
     }
 
     override fun onResume() {
