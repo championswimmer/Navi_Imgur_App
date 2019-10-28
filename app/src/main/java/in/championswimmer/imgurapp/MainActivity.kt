@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
-            currentAnimator = ObjectAnimator.ofInt(progressPhotoStory, "progress", 100, 0).apply {
+            currentAnimator = ObjectAnimator.ofInt(progressPhotoStory, "progress", 0, 100).apply {
                 duration = 4000
                 interpolator = LinearInterpolator()
                 start()

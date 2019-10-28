@@ -15,11 +15,13 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tlIndicator"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
         android:layout_height="30dp"
         android:layout_margin="10dp"
         android:background="@android:color/black"
-        app:tabGravity="center"
+        app:tabMaxWidth="40dp"
+        app:tabMode="scrollable"
         app:tabIndicatorGravity="stretch"
         app:tabRippleColor="@color/colorPrimary"
         app:tabSelectedTextColor="@android:color/black" />
