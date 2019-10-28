@@ -72,6 +72,7 @@ class MainActivity : AppCompatActivity() {
     private val callGoToNext = { it: Animator -> goToNextPhoto() }
 
     private fun goToNextPhoto() {
+        // If we have run out of photos, load next page of API
         if (photoStoryViewModel.photoStream.value?.empty() == true) {
             photoStoryViewModel.refreshPhotoStory(true)
         }

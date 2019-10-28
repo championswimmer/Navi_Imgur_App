@@ -15,6 +15,16 @@ import androidx.core.content.ContextCompat
 
 object ImageDownloader {
 
+
+    /**
+     * Initiates image download via the [DownloadManager]
+     * Although we have the current bitmap fetched by Glide, when user wants to download
+     * let us go to the original URI and download the original sized image as it is.
+     *
+     * TODO: If permission is not available, we have asked, but not continued the download
+     *       after the permission is granted. For better UX, the original image because of which
+     *       permission was asked should start downloading after permission grant.
+     */
     @JvmStatic
     fun initiateImageDownload(activity: Activity, image: Image) {
         when (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
