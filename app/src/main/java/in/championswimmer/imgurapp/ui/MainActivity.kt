@@ -1,5 +1,7 @@
-package `in`.championswimmer.imgurapp
+package `in`.championswimmer.imgurapp.ui
 
+import `in`.championswimmer.imgurapp.R.layout
+import `in`.championswimmer.imgurapp.R.string
 import `in`.championswimmer.imgurapp.enums.FetchStatus.FAILED
 import `in`.championswimmer.imgurapp.enums.FetchStatus.FETCHING
 import `in`.championswimmer.imgurapp.enums.FetchStatus.NONE
@@ -37,10 +39,10 @@ class MainActivity : AppCompatActivity() {
                 FAILED -> {
                     contentLoader.hide()
                     AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.err_fetch_story_title))
-                        .setMessage(getString(R.string.err_fetch_story_msg))
-                        .setNegativeButton(getString(R.string.btn_close_app)) { _, _ -> finish() }
-                        .setPositiveButton(getString(R.string.btn_retry)) { _, _ -> refresh() }
+                        .setTitle(getString(string.err_fetch_story_title))
+                        .setMessage(getString(string.err_fetch_story_msg))
+                        .setNegativeButton(getString(string.btn_close_app)) { _, _ -> finish() }
+                        .setPositiveButton(getString(string.btn_retry)) { _, _ -> refresh() }
                         .setCancelable(false)
                         .show()
                 }
@@ -59,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(layout.activity_main)
 
         setupViewModel()
         refresh()

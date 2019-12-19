@@ -1,7 +1,6 @@
 package `in`.championswimmer.imgurapp.utils
 
-import `in`.championswimmer.imgurapp.MainActivity
-import `in`.championswimmer.imgurapp.MainActivity.Companion
+import `in`.championswimmer.imgurapp.ui.MainActivity
 import `in`.championswimmer.libimgur.models.Image
 import android.Manifest
 import android.app.Activity

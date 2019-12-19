@@ -1,8 +1,8 @@
-package `in`.championswimmer.imgurapp
+package `in`.championswimmer.imgurapp.ui
 
+import `in`.championswimmer.imgurapp.R.layout
 import `in`.championswimmer.imgurapp.enums.FetchStatus.FAILED
 import `in`.championswimmer.imgurapp.enums.FetchStatus.FETCHING
-import `in`.championswimmer.imgurapp.enums.FetchStatus.NONE
 import `in`.championswimmer.imgurapp.enums.FetchStatus.SUCCESS
 import `in`.championswimmer.imgurapp.listadapters.CommentListAdapter
 import `in`.championswimmer.imgurapp.listadapters.PhotoListAdapter
@@ -77,7 +77,7 @@ class AlbumDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_album_details)
+        setContentView(layout.activity_album_details)
 
         albumHash = intent.getStringExtra(BUNDLE_KEY_ALBUM_HASH) ?: ""
         if (albumHash.isEmpty()) {
