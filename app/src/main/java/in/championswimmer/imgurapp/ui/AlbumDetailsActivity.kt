@@ -1,12 +1,15 @@
 package `in`.championswimmer.imgurapp.ui
 
+import `in`.championswimmer.imgurapp.ImgurApp
 import `in`.championswimmer.imgurapp.R.layout
+import `in`.championswimmer.imgurapp.di.components.DaggerActivityComponent
 import `in`.championswimmer.imgurapp.enums.FetchStatus.FAILED
 import `in`.championswimmer.imgurapp.enums.FetchStatus.FETCHING
 import `in`.championswimmer.imgurapp.enums.FetchStatus.SUCCESS
 import `in`.championswimmer.imgurapp.listadapters.CommentListAdapter
 import `in`.championswimmer.imgurapp.listadapters.PhotoListAdapter
 import `in`.championswimmer.imgurapp.viewmodels.AlbumDetailsViewModel
+import `in`.championswimmer.libimgur.interfaces.ImgurAPI
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -19,8 +22,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy
 import kotlinx.android.synthetic.main.activity_album_details.*
+import javax.inject.Inject
 
 class AlbumDetailsActivity : AppCompatActivity() {
+
+    val daggerActivityComponent = DaggerActivityComponent.builder()
+        .appComponent((application as ImgurApp).appComponent)
+        .build()
+
+    @Inject lateinit var imgurApi: ImgurAPI
+
 
     companion object {
         const val BUNDLE_KEY_ALBUM_HASH = "album_hash"
@@ -76,6 +87,7 @@ class AlbumDetailsActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        daggerActivityComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_album_details)
 
